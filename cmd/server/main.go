@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	logger "github.com/sirupsen/logrus"
 
 	"recipes/configs"
@@ -41,4 +43,5 @@ func main() {
 
 	// Настройка и запуск сервера
 	server.SetupAndRunServer(&cfg.Server, handlers.InitRouters())
+	fmt.Println("Server started")
 }
