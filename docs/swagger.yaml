@@ -1,0 +1,10 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: 'API для управления пользователями: создание, обновление, удаление
+    и получение данных.'
+  title: User Management API
+  version: "1.0"
+paths: {}
+swagger: "2.0"
