@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 
-	"recipes/internal/db/models"
-	"recipes/internal/handler/error_handler"
+	"simple_crud_go/internal/db/models"
+	"simple_crud_go/internal/handler/error_handler"
 )
 
 // CreateUser godoc
@@ -23,7 +23,7 @@ import (
 // @Failure      400 {object} ErrorResponse "Invalid input format"
 // @Failure      403 {object} ErrorResponse "Username or email already exists"
 // @Failure      500 {object} ErrorResponse "Internal server error"
-// @Router       /users [post]
+// @Router       / [post]
 func (h *Handler) CreateUser(c *gin.Context) {
 	var input models.User
 
@@ -57,11 +57,11 @@ func (h *Handler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	userResponse := models.UserResponse{ID: userID}
+	userResponse := models.UserIdResponse{ID: userID}
 
 	// Формируем ответ
 	response := SuccessResponse{
-		Status: StatusOK,
+		Status: StatusSuccess,
 		Data:   userResponse,
 	}
 
@@ -73,12 +73,12 @@ func (h *Handler) CreateUser(c *gin.Context) {
 // @Description  Retrieve a user by their ID
 // @Tags         users
 // @Produce      json
-// @Param        id path int true "User ID"
+// @Param        id path string true "User ID"  // Используем string для ID
 // @Success      200 {object} SuccessResponse{data=models.UserResponse}
 // @Failure      400 {object} ErrorResponse "Invalid user ID format"
 // @Failure      404 {object} ErrorResponse "User not found"
 // @Failure      500 {object} ErrorResponse "Internal server error"
-// @Router       /users/{id} [get]
+// @Router       /{id} [get]
 func (h *Handler) GetUserByID(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -105,7 +105,7 @@ func (h *Handler) GetUserByID(c *gin.Context) {
 
 	// Формируем ответ
 	response := SuccessResponse{
-		Status: StatusOK,
+		Status: StatusSuccess,
 		Data:   userResponse,
 	}
 
@@ -118,13 +118,13 @@ func (h *Handler) GetUserByID(c *gin.Context) {
 // @Tags         users
 // @Accept       json
 // @Produce      json
-// @Param        id   path int         true "User ID"
+// @Param        id   path string         true "User ID"  // Используем string для ID
 // @Param        user body models.UserUpdate true "Updated User Data"
 // @Success      200 {object} SuccessResponse{data=string} "User updated successfully"
 // @Failure      400 {object} ErrorResponse "Invalid input format"
 // @Failure      404 {object} ErrorResponse "User not found"
 // @Failure      500 {object} ErrorResponse "Internal server error"
-// @Router       /users/{id} [put]
+// @Router       /{id} [put]
 func (h *Handler) UpdateUser(c *gin.Context) {
 	var input models.UserUpdate
 
@@ -161,7 +161,7 @@ func (h *Handler) UpdateUser(c *gin.Context) {
 	}
 
 	response := SuccessResponse{
-		Status: StatusOK,
+		Status: StatusSuccess,
 		Data:   "User updated successfully",
 	}
 
@@ -174,26 +174,26 @@ func (h *Handler) UpdateUser(c *gin.Context) {
 // @Description  Delete user by ID
 // @Tags         users
 // @Produce      json
-// @Param        id path int true "User ID"
+// @Param        id path string true "User ID"  // Используем string для ID
 // @Success      200 {object} SuccessResponse{data=string} "User deleted successfully"
 // @Failure      404 {object} ErrorResponse "User not found"
 // @Failure      500 {object} ErrorResponse "Internal server error"
-// @Router       /users/{id} [delete]
+// @Router       /{id} [delete]
 func (h *Handler) DeleteUser(c *gin.Context) {
 	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := strconv.Atoi(idParam) // Преобразуем строку в число
 	if err != nil {
 		NewErrorResponse(c, http.StatusNotFound, "User not found", err)
 		return
 	}
 
 	if err := h.services.DeleteUser(c, id); err != nil {
-		NewErrorResponse(c, http.StatusInternalServerError, "Something wrong", err)
+		NewErrorResponse(c, http.StatusInternalServerError, "Something went wrong", err)
 		return
 	}
 
 	response := SuccessResponse{
-		Status: StatusOK,
+		Status: StatusSuccess,
 		Data:   "User deleted successfully",
 	}
 
@@ -207,17 +207,16 @@ func (h *Handler) DeleteUser(c *gin.Context) {
 // @Produce      json
 // @Success      200 {object} SuccessResponse{data=[]models.UserResponse}
 // @Failure      500 {object} ErrorResponse "Internal server error"
-// @Router       /users [get]
+// @Router       / [get]
 func (h *Handler) ListUser(c *gin.Context) {
-	ctx := c.Request.Context()
-	users, err := h.services.ListUser(ctx)
+	users, err := h.services.ListUser(c)
 	if err != nil {
-		NewErrorResponse(c, http.StatusInternalServerError, "Something wrong", err)
+		NewErrorResponse(c, http.StatusInternalServerError, "Something went wrong", err)
 		return
 	}
 
 	response := SuccessResponse{
-		Status: StatusOK,
+		Status: StatusSuccess,
 		Data:   users,
 	}
 

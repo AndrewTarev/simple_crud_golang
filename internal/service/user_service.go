@@ -8,8 +8,8 @@ import (
 	"github.com/jackc/pgx/v5"
 	logger "github.com/sirupsen/logrus"
 
-	"recipes/internal/db/models"
-	"recipes/pkg/utils"
+	"simple_crud_go/internal/db/models"
+	"simple_crud_go/pkg/utils"
 )
 
 func (s *Service) CreateUser(ctx context.Context, user *models.User) (int, error) {

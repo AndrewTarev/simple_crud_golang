@@ -8,7 +8,11 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	logger "github.com/sirupsen/logrus"
 
-	"recipes/configs"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+
+	"simple_crud_go/configs"
 )
 
 func ConnectPostgres(cfg *configs.PostgresConfig) (*pgxpool.Pool, error) {
@@ -48,4 +52,20 @@ func ConnectPostgres(cfg *configs.PostgresConfig) (*pgxpool.Pool, error) {
 
 	logger.Infof("Successfully connected to PostgreSQL at %s:%d", cfg.Host, cfg.Port)
 	return pool, nil
+}
+
+func ApplyMigrations() {
+	m, err := migrate.New(
+		"file:///app/internal/db/migrations",
+		"postgres://postgres:postgres@db:5432/postgres?sslmode=disable",
+	)
+	if err != nil {
+		logger.Fatalf("Could not initialize migrate: %v", err)
+	}
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		logger.Fatalf("Could not apply migrations: %v", err)
+	}
+
+	logger.Println("Migrations applied successfully!")
 }

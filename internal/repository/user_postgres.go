@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"recipes/internal/db/models"
+	"simple_crud_go/internal/db/models"
 )
 
 func (r *userRepository) CreateUser(ctx context.Context, user *models.User) (int, error) {

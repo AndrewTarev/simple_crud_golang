@@ -11,7 +11,7 @@ import (
 
 	logger "github.com/sirupsen/logrus"
 
-	"recipes/configs"
+	"simple_crud_go/configs"
 )
 
 func SetupAndRunServer(cfg *configs.ServerConfig, handler http.Handler) {

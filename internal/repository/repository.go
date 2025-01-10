@@ -5,7 +5,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"recipes/internal/db/models"
+	"simple_crud_go/internal/db/models"
 )
 
 type UserRepository interface {

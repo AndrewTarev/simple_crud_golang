@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"recipes/internal/db/models"
-	"recipes/internal/repository"
+	"simple_crud_go/internal/db/models"
+	"simple_crud_go/internal/repository"
 )
 
 type UserService interface {

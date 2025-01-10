@@ -5,7 +5,9 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	"recipes/internal/service"
+	_ "simple_crud_go/docs"
+
+	"simple_crud_go/internal/service"
 )
 
 type Handler struct {
@@ -20,6 +22,9 @@ func NewHandler(services service.UserService) *Handler {
 func (h *Handler) InitRouters() *gin.Engine {
 	router := gin.New()
 
+	// Роут для Swagger-документации
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	// Роуты для пользователя
 	user := router.Group("/user")
 	{
@@ -29,9 +34,6 @@ func (h *Handler) InitRouters() *gin.Engine {
 		user.DELETE("/:id", h.DeleteUser)
 		user.GET("/", h.ListUser)
 	}
-
-	// Роут для Swagger-документации
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return router
 }

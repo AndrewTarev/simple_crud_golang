@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	StatusOK        = "success"
+	StatusSuccess   = "success"
 	StatusError     = "failed"
 	UniqueViolation = "23505"
 )
@@ -17,12 +17,18 @@ type SuccessResponse struct {
 	Data   interface{} `json:"data"`
 }
 
-// NewErrorResponse - обработчик ошибок
+type ErrorResponse struct {
+	Message string `json:"message"`
+}
+
+// NewErrorResponse обрабатывает ошибки и формирует JSON-ответ с ошибкой.
 func NewErrorResponse(c *gin.Context, statusCode int, message string, err error) {
 	logger.Error(err)
-	// Формируем ответ, но не передаем детали ошибки пользователю
+	// Формируем ответ, передавая объект ErrorResponse
 	c.AbortWithStatusJSON(statusCode, gin.H{
 		"status": StatusError,
-		"error":  message,
+		"error": ErrorResponse{
+			Message: message,
+		},
 	})
 }

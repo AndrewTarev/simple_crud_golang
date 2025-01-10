@@ -1,5 +1,5 @@
 migrateup:
-	migrate -path ./schema -database 'postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable' up
+	migrate -path ./internal/db/migrations -database 'postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable' up
 
 migratedown:
-	migrate -path ./schema -database 'postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable' down
+	migrate -path ./internal/db/migrationsy -database 'postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable' down

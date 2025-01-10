@@ -6,7 +6,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"recipes/configs"
+	"simple_crud_go/configs"
 )
 
 // SetupLogger настраивает глобальный логгер logrus в соответствии с конфигурацией.
