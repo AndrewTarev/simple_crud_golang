@@ -7,11 +7,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type ValidationErrorResponse struct {
-	Message string            `json:"message"`
-	Errors  map[string]string `json:"errors"`
-}
-
 func ParseValidationErrors(err error) string {
 	if validationErrors, ok := err.(validator.ValidationErrors); ok {
 		var errorMessages []string
